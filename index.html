@@ -20,7 +20,6 @@
     .accent-gradient{background: linear-gradient(90deg,var(--accent-from),var(--accent-to));}
     .grid-bg{background-image: radial-gradient(circle at 10% 10%, rgba(163,147,255,0.06) 0.5px, transparent 0.5px);background-size:20px 20px}
 
-    /* ✨ Optimized Custom Animations - GPU accelerated */
     @keyframes fadeInUp { 
       from {opacity:0; transform: translate3d(0, 30px, 0) scale(0.95);} 
       to {opacity:1; transform: translate3d(0, 0, 0) scale(1);} 
@@ -60,22 +59,6 @@
     @keyframes pulse { 
       0%,100% {transform: translate3d(0, 0, 0) scale(1);} 
       50% {transform: translate3d(0, 0, 0) scale(1.05);} 
-    }
-    @keyframes shimmer { 
-      0% {background-position: -200% 0;} 
-      100% {background-position: 200% 0;} 
-    }
-    @keyframes glow { 
-      0%,100% {box-shadow: 0 0 5px rgba(108,99,255,0.3);} 
-      50% {box-shadow: 0 0 20px rgba(108,99,255,0.6), 0 0 30px rgba(108,99,255,0.4);} 
-    }
-    @keyframes typewriter { 
-      from {width: 0;} 
-      to {width: 100%;} 
-    }
-    @keyframes blink { 
-      0%,50% {border-color: transparent;} 
-      51%,100% {border-color: currentColor;} 
     }
 
     /* Optimized Animation Classes - GPU accelerated, start hidden */
@@ -123,10 +106,6 @@
       will-change: transform;
       animation: pulse 2s ease-in-out infinite;
     }
-    .glow {
-      will-change: box-shadow;
-      animation: glow 2s ease-in-out infinite;
-    }
     
     .moving-gradient {
       background: linear-gradient(270deg,var(--accent-from),var(--accent-to),#7e6cff);
@@ -137,49 +116,17 @@
     .animate-spin-slow { animation: spin 8s linear infinite; }
     
     /* Optimized Staggered animations - GPU accelerated */
-    .stagger-1 {
+    [class*="stagger-"] {
       opacity: 0;
       transform: translate3d(0, 20px, 0);
       will-change: opacity, transform;
-      animation-delay: 0.1s;
     }
-    .stagger-2 {
-      opacity: 0;
-      transform: translate3d(0, 20px, 0);
-      will-change: opacity, transform;
-      animation-delay: 0.2s;
-    }
-    .stagger-3 {
-      opacity: 0;
-      transform: translate3d(0, 20px, 0);
-      will-change: opacity, transform;
-      animation-delay: 0.3s;
-    }
-    .stagger-4 {
-      opacity: 0;
-      transform: translate3d(0, 20px, 0);
-      will-change: opacity, transform;
-      animation-delay: 0.4s;
-    }
-    .stagger-5 {
-      opacity: 0;
-      transform: translate3d(0, 20px, 0);
-      will-change: opacity, transform;
-      animation-delay: 0.5s;
-    }
-    .stagger-6 {
-      opacity: 0;
-      transform: translate3d(0, 20px, 0);
-      will-change: opacity, transform;
-      animation-delay: 0.6s;
-    }
-    
-    /* Shimmer effect */
-    .shimmer {
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-      background-size: 200% 100%;
-      animation: shimmer 2s infinite;
-    }
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+    .stagger-4 { animation-delay: 0.4s; }
+    .stagger-5 { animation-delay: 0.5s; }
+    .stagger-6 { animation-delay: 0.6s; }
 
     /* Optimized Hover Effects - GPU accelerated */
     .hover-glow {
@@ -305,7 +252,7 @@
     /* 3D Tilt Effect */
     .tilt-3d {
       transform-style: preserve-3d;
-      transition: transform 0.1s ease-out;
+      transition: transform 0.3s ease-out;
       will-change: transform;
     }
     
@@ -324,7 +271,6 @@
         <a href="#prizes" class="text-sm text-white/80 nav-link stagger-3">Prizes</a>
         <a href="#register" class="px-4 py-2 rounded-full moving-gradient text-black text-sm font-medium btn-hover stagger-4">Register</a>
       </div>
-      <!-- <button id="menu-toggle" class="sm:hidden p-2 bg-white/6 rounded-md" aria-controls="nav-links" aria-expanded="false">☰</button> -->
     </nav>
   </header>
 
@@ -583,7 +529,7 @@
   window.addEventListener('load', () => {
     document.body.classList.add('loaded');
     // Keep all animations paused initially - they'll be triggered by scroll
-    document.querySelectorAll('.stagger-1, .stagger-2, .stagger-3, .stagger-4, .stagger-5, .stagger-6').forEach(el => {
+    document.querySelectorAll('[class*="stagger-"]').forEach(el => {
       el.style.animationPlayState = 'paused';
     });
   });
@@ -627,14 +573,14 @@
         }
         
         // Trigger staggered animations for child elements with scroll-triggered timing
-        const staggerElements = element.querySelectorAll('.stagger-1, .stagger-2, .stagger-3, .stagger-4, .stagger-5, .stagger-6');
+        const staggerElements = element.querySelectorAll('[class*="stagger-"]');
         staggerElements.forEach((el, index) => {
           setTimeout(() => {
             el.style.animationPlayState = 'running';
             el.style.opacity = '1';
             el.style.transform = 'translateY(0)';
             el.classList.add('animate');
-          }, index * 150); // Slightly longer delay for better scroll effect
+          }, index * 150);
         });
         
         observer.unobserve(element);
@@ -642,31 +588,12 @@
     });
   }, observerOptions);
 
-  // Observe all sections and elements with animation classes
   document.querySelectorAll('section, .fade-up, .slide-left, .slide-right, .scale-in, .bounce-in').forEach(el => {
     observer.observe(el);
   });
 
-  // Optimized parallax effect with throttling
-  let ticking = false;
-  const hero = document.querySelector('.hero-section');
-  
-  function updateParallax() {
-    if (hero) {
-      const scrolled = window.pageYOffset;
-      hero.style.transform = `translate3d(0, ${scrolled * 0.3}px, 0)`;
-    }
-    ticking = false;
-  }
-  
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(updateParallax);
-      ticking = true;
-    }
-  });
 
-  // 3D Tilt Effect for register card
+  // 3D Tilt Effect 
   const tiltCard = document.querySelector('.tilt-3d');
   if (tiltCard) {
     tiltCard.addEventListener('mousemove', (e) => {
@@ -677,8 +604,8 @@
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
       
-      const rotateX = (y - centerY) / 10;
-      const rotateY = (centerX - x) / 10;
+      const rotateX = (y - centerY) / 15;
+      const rotateY = (centerX - x) / 15;
       
       tiltCard.style.setProperty('--mouse-x', `${rotateY}deg`);
       tiltCard.style.setProperty('--mouse-y', `${rotateX}deg`);
@@ -691,7 +618,6 @@
   }
 
 
-  // Add optimized loading styles
   const style = document.createElement('style');
   style.textContent = `
     /* Performance optimizations */
@@ -700,7 +626,6 @@
       -moz-osx-font-smoothing: grayscale;
     }
     
-    /* Ensure all scroll-triggered elements start hidden */
     .fade-up:not(.animate),
     .slide-left:not(.animate),
     .slide-right:not(.animate),
@@ -709,12 +634,7 @@
       opacity: 0;
     }
     
-    .stagger-1:not(.animate),
-    .stagger-2:not(.animate),
-    .stagger-3:not(.animate),
-    .stagger-4:not(.animate),
-    .stagger-5:not(.animate),
-    .stagger-6:not(.animate) {
+    [class*="stagger-"]:not(.animate) {
       opacity: 0;
       transform: translate3d(0, 20px, 0);
     }
@@ -723,22 +643,14 @@
       animation-play-state: running !important;
     }
     
-    .hero-section {
-      transition: transform 0.1s ease-out;
-      will-change: transform;
-    }
-    
-    /* Optimized transitions for scroll-triggered animations */
     .fade-up, .slide-left, .slide-right, .scale-in, .bounce-in,
-    .stagger-1, .stagger-2, .stagger-3, .stagger-4, .stagger-5, .stagger-6 {
+    [class*="stagger-"] {
       transition: opacity 0.4s ease-out, transform 0.4s ease-out;
     }
     
-    /* Reduce motion for users who prefer it */
     @media (prefers-reduced-motion: reduce) {
       .fade-up, .slide-left, .slide-right, .scale-in, .bounce-in,
-      .stagger-1, .stagger-2, .stagger-3, .stagger-4, .stagger-5, .stagger-6,
-      .float, .pulse, .glow {
+      [class*="stagger-"], .float, .pulse {
         animation: none !important;
         transition: opacity 0.3s ease !important;
         transform: none !important;
@@ -757,7 +669,6 @@
       }
     }
     
-    /* GPU acceleration for better performance */
     .btn-hover, .hover-glow {
       backface-visibility: hidden;
     }
